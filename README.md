@@ -7,6 +7,8 @@ or other non-floating point platforms or languages.
 
 This will be used as the basis for the Mandelbrot implementations in the [SPAM-1 cpu](https://github.com/Johnlon/spam-1).
 
+The fixed point impl uses "8.8" encoding in 16 bit "short" integers, where for example decimal 3.5 is hex 0x380 and decimal 2.25 is hex 0x240 (0x40 being 1/4 of 0x100).
+
 ```text
 $ gcc float.c && ./a.out 
 

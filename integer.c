@@ -1,5 +1,7 @@
 /**
-  ascii Mandelbrot using fixed point integer maths with am "8.8" encoding.
+  ascii Mandelbrot using fixed point integer maths with an "8.8" encoding.
+
+  shorts (16 bit) chosen for compatibility with a later reimplementation as two bytes per number in assembler.
 */
 
 #include <stdio.h>
@@ -11,13 +13,13 @@
 int main(int argc, char* argv[])
 {
   // chosen to match https://www.youtube.com/watch?v=DC5wi6iv9io
-  int width = 32; // basic width of a zx81
-  int height = 22; // basic width of a zx81
-  int zoom=1;  // bigger = finer detail - leave at 1 for 32x22
+  short width = 32; // basic width of a zx81
+  short height = 22; // basic width of a zx81
+  short zoom=1;  // bigger = finer detail - leave at 1 for 32x22
 
   // header
   printf("%2s : ", "");
-  int w = 0;
+  short w = 0;
   while (w <= width*zoom) {
     if (w%10==0) {
       printf("%-2d", w);
@@ -30,12 +32,12 @@ int main(int argc, char* argv[])
 
   // fractal
   char * chr = ".,'~=+:;[/<&?oxOX# ";
-  int iters = strlen(chr);
+  short iters = strlen(chr);
 
-  int py=0;
+  short py=0;
   while (py < height*zoom) {
     printf("%02d : ", py);
-    int px=0;
+    short px=0;
     while (px < width*zoom) {
       // $380 = 3.5      $240=2.25    $180=1.5     $300=3
       short x0 = ((px*0x380/zoom) / width) - 0x240;
@@ -44,7 +46,7 @@ int main(int argc, char* argv[])
       short x=0;
       short y=0;
 
-      int i=0;
+      short i=0;
 
       while (i < iters) {
         short xSqr = (x * x) >> 8;
