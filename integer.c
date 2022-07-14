@@ -1,67 +1,69 @@
+/**
+  ascii Mandelbrot using fixed point integer maths with am "8.8" encoding.
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
-
-char chr [ ]= { '0','1', '2','3','4','5','6','7','8','9','A','B','C','D','E'};
+#include <string.h>
 
 int main(int argc, char* argv[])
 {
+  // chosen to match https://www.youtube.com/watch?v=DC5wi6iv9io
+  int width = 32; // basic width of a zx81
+  int height = 22; // basic width of a zx81
+  int zoom=1;  // bigger = finer detail - leave at 1 for 32x22
 
+  // header
   printf("%2s : ", "");
   int w = 0;
-  while (w <= 51) {
+  while (w <= width*zoom) {
     if (w%10==0) {
       printf("%-2d", w);
       w ++;
     }
-      else printf(" ");
+    else printf(" ");
     w ++;
   }
   printf("\n");
 
-
-  int granularity=1;  // bigger = finer
+  // fractal
+  char * chr = ".,'~=+:;[/<&?oxOX# ";
+  int iters = strlen(chr);
 
   int py=0;
-  while (py <= 22*granularity) {
+  while (py < height*zoom) {
     printf("%02d : ", py);
     int px=0;
-    while (px <= 32*granularity) {
-
-      short x0 = ((px*0x350/granularity) / 32) - 0x280;
-      short y0 = ((py*0x200/granularity) / 22) - 0x100;
+    while (px < width*zoom) {
+      // $380 = 3.5      $240=2.25    $180=1.5     $300=3
+      short x0 = ((px*0x380/zoom) / width) - 0x240;
+      short y0 = ((py*0x300/zoom) / height) - 0x180;
 
       short x=0;
       short y=0;
 
       int i=0;
 
-
-      while (i <= 14) {
+      while (i < iters) {
         short xSqr = (x * x) >> 8;
         short ySqr = (y * y) >> 8;
-
 
         if ((xSqr + ySqr) > 0x400) {
           break;
         }
-
 
         short xt = xSqr - ySqr + x0;
         y = (((x * y)>>8) * 2 ) + y0;
         x=xt;
 
         i = i + 1;
-
       }
+
       i = i - 1;
 
-
-     // if (i ==0) printf(" ");
-     // else 
-      printf("%1x", i);
+      printf("%c", chr[i]);
 
       px = px + 1;
 
