@@ -1,4 +1,4 @@
-# Mandelbrot implementations
+# Fixed point Integer and Floating point Mandelbrot implementations
 
 A Fixed point integer implementation and a line by line equivalent Floating point implementations of Mandelbrot in C.
 
