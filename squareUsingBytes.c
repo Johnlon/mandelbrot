@@ -17,7 +17,7 @@ BYTE timesHi(BYTE a, BYTE b) {
     return  ((a * b) & 0xff00) >> 8;
 }
 
-void testSqD(short a, short b, short expected, short d) {
+short square(short a, short b) {
     // disassemble the args into bytes
     BYTE aHi = (a & 0xff00) >> 8;
     BYTE aLo = a & 0xff;
@@ -90,6 +90,13 @@ void testSqD(short a, short b, short expected, short d) {
 
     //short sqr = b1 + (b2 << 8);
     short sqr = (b2 << 8) + b1;
+
+    return sqr;
+
+}
+void testSqD(short a, short b, short expected, short d) {
+
+    short sqr = square(a,b);
 
     //short sqr = fixedPtMultiply1(a, b);
     //    short sqr = two(a, b);
