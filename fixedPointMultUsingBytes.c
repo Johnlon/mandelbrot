@@ -17,7 +17,7 @@ BYTE timesHi(BYTE a, BYTE b) {
     return  ((a * b) & 0xff00) >> 8;
 }
 
-short square(short a, short b) {
+short multiply(short a, short b) {
     // disassemble the args into bytes
     BYTE aHi = (a & 0xff00) >> 8;
     BYTE aLo = a & 0xff;

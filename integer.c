@@ -10,10 +10,13 @@
 #include <stdint.h>
 #include <string.h>
 
+short square(short a, short b);
+
 void prt(short c, short s) {
    printf("s=%d/%04x     ", s, (0xffff & s));
    printf("c=%d dec/%02d trunc dec / %02x\n", c, 0xff & c, 0xff & c);
 }
+
 
 int main(int argc, char* argv[])
 {
