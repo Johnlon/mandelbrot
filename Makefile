@@ -3,7 +3,12 @@ LDFLAGS = -lm
 
 TARGET=g
 
-all: squareUsingBytes integer float
+all: 
+	mkdir -p bin
+	$(CC) integer.c -o bin/integer
+	$(CC) float.c -o bin/float
+	$(CC) squareUsingBytes.c squareUsingBytesTest.c -o bin/squareUsingBytesTest
 
-clean: squareUsingBytes integer float
-	rm squareUsingBytes integer float
+clean: 
+	rm -r bin
+
