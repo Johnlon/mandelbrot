@@ -10,6 +10,11 @@
 #include <stdint.h>
 #include <string.h>
 
+void prt(short c, short s) {
+   printf("s=%d/%04x     ", s, (0xffff & s));
+   printf("c=%d dec/%02d trunc dec / %02x\n", c, 0xff & c, 0xff & c);
+}
+
 int main(int argc, char* argv[])
 {
   // chosen to match https://www.youtube.com/watch?v=DC5wi6iv9io
@@ -17,40 +22,32 @@ int main(int argc, char* argv[])
   short height = 22; // basic width of a zx81
   short zoom=1;  // bigger = finer detail - leave at 1 for 32x22
 
-  // header
-  printf("%2s : ", "");
-  short w = 0;
-  while (w <= width*zoom) {
-    if (w%10==0) {
-      printf("%-2d", w);
-      w ++;
-    }
-    else printf(" ");
-    w ++;
-  }
-  printf("\n");
-
   // fractal
-  char * chr = ".,'~=+:;[/<&?oxOX# ";
+  char * chr = ".=X ";
   short iters = strlen(chr);
 
   short py=0;
   while (py < height*zoom) {
-    printf("%02d : ", py);
     short px=0;
     while (px < width*zoom) {
       // $380 = 3.5      $240=2.25    $180=1.5     $300=3
-      short x0 = ((px*0x380/zoom) / width) - 0x240;
-      short y0 = ((py*0x300/zoom) / height) - 0x180;
+      short x0 = (((short)(px*0x380)/zoom) >> 5) - 0x240;
+      short y0 = ((py*0x300/zoom) >> 4) - 0x180;
 
       short x=0;
       short y=0;
 
       short i=0;
 
+
+      short xSqr;
+      short ySqr;
       while (i < iters) {
-        short xSqr = (x * x) >> 8;
-        short ySqr = (y * y) >> 8;
+        xSqr = (x * x) >> 8;
+        ySqr = (y * y) >> 8;
+
+        if (i == 1 && px == 1 && py == 0) 
+            prt(x, xSqr);
 
         if ((xSqr + ySqr) > 0x400) {
           break;
@@ -61,7 +58,10 @@ int main(int argc, char* argv[])
         x=xt;
 
         i = i + 1;
+
+
       }
+
 
       i = i - 1;
 
