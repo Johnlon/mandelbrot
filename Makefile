@@ -7,7 +7,7 @@ all:
 	mkdir -p bin
 	$(CC) integer.c -o bin/integer
 	$(CC) float.c -o bin/float
-	$(CC) squareUsingBytes.c squareUsingBytesTest.c -o bin/squareUsingBytesTest
+	$(CC) fixedPointMultUsingBytes.c fixedPointMultUsingBytesTest.c -o bin/fixedPointMultUsingBytesTest
 
 clean: 
 	rm -r bin
