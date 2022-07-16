@@ -1,3 +1,7 @@
 /.idea/
 *.un~
 a.out
+c.c
+float
+integer
+unsignedChar
