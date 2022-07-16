@@ -17,8 +17,6 @@ BYTE timesHi(BYTE a, BYTE b) {
     return  ((a * b) & 0xff00) >> 8;
 }
 
-
-
 void testSqD(short a, short b, short expected, short d) {
     // disassemble the args into bytes
     BYTE aHi = (a & 0xff00) >> 8;
@@ -96,6 +94,7 @@ void testSqD(short a, short b, short expected, short d) {
     //short sqr = fixedPtMultiply1(a, b);
     //    short sqr = two(a, b);
     printf("\ta=%d/%04x \tb=%d/%04x  \texpected %d/%04x  \tgot  %d/%04x \n", a, 0xffff&a, b,0xffff&b,expected&0xffff, expected&0xffff, sqr, sqr);
+
     if (  ( d != 0 && (sqr < expected-d || sqr > expected+d)) || (d ==0 && sqr != expected)) {
         printf("err");
         exit(1);
@@ -147,7 +146,7 @@ void main() {
         printf("\t N: %f ", n);
         printf("\t N2: %f ", n*n);
 
-        testSqD(i, i, 256*(n * n), 10);
+        testSqD(i, i, 256*(n * n), 1);
     }
 
 }

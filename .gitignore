@@ -5,3 +5,4 @@ c.c
 float
 integer
 unsignedChar
+squareUsingBytes
