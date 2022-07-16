@@ -1,29 +1,31 @@
 /*
   fixed point 8.8 multiply demonstrated using unsigned char for the upper and lower bytes.
+  care has been taken to avoid the affects of the compiler promoting 8 bit values to 16/32 during the maths.
 */
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef unsigned char UC;
+typedef unsigned char BYTE;
 
-// ALU operations
-UC timesLo(UC a, UC b) {
+// SPAM-1 CPU ALU operation supports this
+BYTE timesLo(BYTE a, BYTE b) {
     return  ((a * b) & 0xff);
 }
 
-// ALU operations
-UC timesHi(UC a, UC b) {
+// SPAM-1 CPU ALU operation supports this
+BYTE timesHi(BYTE a, BYTE b) {
     return  ((a * b) & 0xff00) >> 8;
 }
 
 
 
 void testSqD(short a, short b, short expected, short d) {
-    UC aHi = (a & 0xff00) >> 8;
-    UC aLo = a & 0xff;
+    // disassemble the args into bytes
+    BYTE aHi = (a & 0xff00) >> 8;
+    BYTE aLo = a & 0xff;
 
-    UC bHi = (b & 0xff00) >> 8;
-    UC bLo = b & 0xff;
+    BYTE bHi = (b & 0xff00) >> 8;
+    BYTE bLo = b & 0xff;
 /*
     printf("----------------\n");
     printf("aHi   %5d  %02x \n", aHi , aHi);
@@ -33,17 +35,17 @@ void testSqD(short a, short b, short expected, short d) {
     printf("bLo   %5d  %02x \n", bLo , bLo);
     */
 
-    UC LLl = timesLo(aLo , bLo);
-    UC LLh = timesHi(aLo , bLo);
+    BYTE LLl = timesLo(aLo , bLo);
+    BYTE LLh = timesHi(aLo , bLo);
 
-    UC LHl = timesLo(aLo , bHi);
-    UC LHh = timesHi(aLo , bHi);
+    BYTE LHl = timesLo(aLo , bHi);
+    BYTE LHh = timesHi(aLo , bHi);
 
-    UC HLl = timesLo(aHi , bLo);
-    UC HLh = timesHi(aHi , bLo);
+    BYTE HLl = timesLo(aHi , bLo);
+    BYTE HLh = timesHi(aHi , bLo);
 
-    UC HHl = timesLo(aHi , bHi);
-    UC HHh = timesHi(aHi , bHi);
+    BYTE HHl = timesLo(aHi , bHi);
+    BYTE HHh = timesHi(aHi , bHi);
 
     /*
     puts("");
@@ -58,27 +60,27 @@ void testSqD(short a, short b, short expected, short d) {
     puts("");
      */
 
-    UC b0 = LLl;
+    BYTE b0 = LLl;
 
-    UC b1CarryA = LLh + LHl > 255? 1:0;
-    UC b1 = LLh + LHl;
+    BYTE b1CarryA = LLh + LHl > 255? 1:0;
+    BYTE b1 = LLh + LHl;
 
-    UC b1CarryB = b1 + HLl > 255? 1:0;
+    BYTE b1CarryB = b1 + HLl > 255? 1:0;
     b1 += HLl;
 
-    UC b2CarryA = LHh + HLh > 255? 1:0;
-    UC b2 = LHh + HLh;
+    BYTE b2CarryA = LHh + HLh > 255? 1:0;
+    BYTE b2 = LHh + HLh;
 
-    UC b2CarryB = b2 + HHl > 255? 1:0;
+    BYTE b2CarryB = b2 + HHl > 255? 1:0;
     b2 += HHl;
 
-    UC b2CarryC = b2 + b1CarryA + b1CarryB > 255? 1:0;
+    BYTE b2CarryC = b2 + b1CarryA + b1CarryB > 255? 1:0;
     b2 += (b1CarryA + b1CarryB);
 
-    UC b3CarryA = HHh + b2CarryA + b2CarryB + b2CarryC > 255? 1:0;
-    UC b3 = HHh;
+    BYTE b3CarryA = HHh + b2CarryA + b2CarryB + b2CarryC > 255? 1:0;
+    BYTE b3 = HHh;
 
-    UC b4 = b3CarryA;
+    BYTE b4 = b3CarryA;
 
     /*
     printf("b0   %5d  %02x \n", b0 , b0);

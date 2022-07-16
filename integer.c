@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
     short px=0;
     while (px < width*zoom) {
       // $380 = 3.5      $240=2.25    $180=1.5     $300=3
-      short x0 = (((short)(px*0x380)/zoom) >> 5) - 0x240;
-      short y0 = ((py*0x300/zoom) >> 4) - 0x180;
+      short x0 = (((px*0x380)/zoom) >> 5) - 0x240;
+      short y0 = (((py*0x300)/zoom) / 22) - 0x180;
 
       short x=0;
       short y=0;

@@ -3,8 +3,7 @@ LDFLAGS = -lm
 
 TARGET=g
 
-all: h
+all: squareUsingBytes integer float
 
-h: h.c
-	$(CC) h.c -o h
-
+clean: squareUsingBytes integer float
+	rm squareUsingBytes integer float
