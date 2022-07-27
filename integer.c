@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     short px=0;
     while (px < width*zoom) {
       // $380 = 3.5      $240=2.25    $180=1.5     $300=3
-      short x0 = s(s(s(px*0x380)/zoom) >> 5) - 0x240;
+      short x0 = s(s(s(px*0x380)/zoom) / 32) - 0x240;
       short y0 = s(s(s(py*0x300)/zoom) / 22) - 0x180;
 
       short x=0;
