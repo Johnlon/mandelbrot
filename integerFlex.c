@@ -1,12 +1,12 @@
 
 /**
-  ascii Mandelbrot using fixed point integer maths with a selectable fractional precision in bits.
-  This is still only 16 bits mathc and allocating more than 6 bits of fractional precision leads to an overflow.
+  ascii Mandelbrot using 16 bits of fixed point integer maths with a selectable fractional precision in bits.
 
-  shorts (16 bit) chosen for compatibility with a later reimplementation as two bytes per number in assembler.
-  Frequent casts to short to ensure we're not accidentally benefitting from GCC promotion to long.
+  This is still only 16 bits mathc and allocating more than 6 bits of fractional precision leads to an overflow that adds noise to the plot..
 
-  gcc integerFlex.c  -lm ; ./a.out | more
+  This code frequently casts to short to ensure we're not accidentally benefitting from GCC promotion from short 16 bits to int.
+
+  gcc integerFlex.c  -lm
 
  */
 
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
   // chosen to match https://www.youtube.com/watch?v=DC5wi6iv9io
   int width = 32; // basic width of a zx81
   int height = 22; // basic width of a zx81
-  int zoom=1;  // bigger with finer detail ie a smaller step size - leave at 1 for 32x22
+  int zoom=3;  // bigger with finer detail ie a smaller step size - leave at 1 for 32x22
 
   // params 
   short bitsPrecision = 6;
@@ -41,8 +41,10 @@ int main(int argc, char* argv[])
 
 
   // fractal
-  char * chr = ".:-=X$#@ ";
-  short iters = strlen(chr);
+  //char * chr = ".:-=X$#@.";
+  char * chr = "abcdefghijklmnopqr ";
+  //char * chr = ".,'~=+:;[/<&?oxOX#.";
+  short maxIters = strlen(chr);
 
   short py=0;
   while (py < height*zoom) {
@@ -65,7 +67,7 @@ if (0 && log >= logFrom) {
 
       short xSqr;
       short ySqr;
-      while (i < iters) {
+      while (i < maxIters) {
         xSqr = s(x * x) >> bitsPrecision;
         ySqr = s(y * y) >> bitsPrecision;
 
@@ -78,9 +80,10 @@ if (0 && log >= logFrom) {
   printf("\n");
 }
 
-        // breakout also if negative as this indicates overflow of the addition which is a fault
-        //if ((xSqr + ySqr) > LIMIT || (xSqr+ySqr) < 0) 
-        if ((xSqr + ySqr) > LIMIT) {
+        // Breakout if sum is > the limit OR breakout also if sum is negative which indicates overflow of the addition has occurred
+        // The overflow check is only needed for precisions of over 6 bits because for 7 and above the sums come out overflowed and negative therefore we always run to maxIters and we see nothing.
+        // By including the overflow break out we can see the fractal again though with noise.
+        if ((xSqr + ySqr) >= LIMIT || (xSqr+ySqr) < 0) {
           break;
         }
 
@@ -127,6 +130,7 @@ if (0 && log >= logFrom) {
 }
 
 short toPrec(double f, int bitsPrecision) {
+// macro to convert a value to a binary string
 #define BYTE_TO_BINARY(byte)  \
   (byte & 0x200 ? '1' : '0'), \
   (byte & 0x100 ? '1' : '0'), \
@@ -145,6 +149,8 @@ short toPrec(double f, int bitsPrecision) {
   printf(" %3f -> dec: %3d   hex: 0x%04x  bin: %c%c %c%c%c%c%c%c%c%c\n",f, ret, ret, BYTE_TO_BINARY(ret));
   return ret;
 }
+
+// convenient casting
 short s(short i) {
   return i;
 }
