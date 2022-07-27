@@ -1,4 +1,6 @@
 /**
+DOESNT WORT WHEN ALL TREMP VALS ARE SHORT
+
   ascii Mandelbrot using fixed point integer maths with an "8.8" encoding.
 
   shorts (16 bit) chosen for compatibility with a later reimplementation as two bytes per number in assembler.
@@ -9,13 +11,6 @@
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
-
-short square(short a, short b);
-
-void prt(short c, short s) {
-   printf("s=%d/%04x     ", s, (0xffff & s));
-   printf("c=%d dec/%02d trunc dec / %02x\n", c, 0xff & c, 0xff & c);
-}
 
 short s(short i) {
   return i;
@@ -51,10 +46,6 @@ int main(int argc, char* argv[])
         xSqr = s(x * x) >> 8;
         ySqr = s(y * y) >> 8;
 
-
-        if (i == 1 && px == 1 && py == 0) 
-            prt(x, xSqr);
-
         if ((xSqr + ySqr) > 0x400) {
           break;
         }
@@ -64,10 +55,7 @@ int main(int argc, char* argv[])
         x=xt;
 
         i = i + 1;
-
-
       }
-
 
       i = i - 1;
 
