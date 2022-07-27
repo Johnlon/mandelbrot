@@ -16,29 +16,8 @@
 #include <stdint.h>
 #include <string.h>
 
-short toPrec(double f, int bitsPrecision) {
-#define BYTE_TO_BINARY(byte)  \
-  (byte & 0x200 ? '1' : '0'), \
-  (byte & 0x100 ? '1' : '0'), \
-  (byte & 0x80 ? '1' : '0'), \
-  (byte & 0x40 ? '1' : '0'), \
-  (byte & 0x20 ? '1' : '0'), \
-  (byte & 0x10 ? '1' : '0'), \
-  (byte & 0x08 ? '1' : '0'), \
-  (byte & 0x04 ? '1' : '0'), \
-  (byte & 0x02 ? '1' : '0'), \
-  (byte & 0x01 ? '1' : '0')
-
-  short whole = ((short)floor(f) << (bitsPrecision));
-  short part = (f-floor(f))*(pow(2,bitsPrecision));
-  short ret = whole + part;
-  printf(" %3f -> %3d 0x%04x  %c%c %c%c%c%c%c%c%c%c\n",f, ret, ret, BYTE_TO_BINARY(ret));
-  return ret;
-}
-short s(short i) {
-  return i;
-}
-
+short s(short i);
+short toPrec(double f, int bitsPrecision);
 
 int main(int argc, char* argv[])
 {
@@ -52,7 +31,7 @@ int main(int argc, char* argv[])
 
   // params 
   short bitsPrecision = 6;
-  printf("DECS=%d\n", bitsPrecision);
+  printf("PRECISION=%d\n", bitsPrecision);
 
   short X1 = toPrec(3.5,bitsPrecision) / zoom;
   short X2 = toPrec(2.25,bitsPrecision) ;
@@ -72,10 +51,6 @@ int main(int argc, char* argv[])
 
       short x0 = s(s(px*X1) / width) - X2;
       short y0 = s(s(py*Y1) / height) - Y2;
-
-      if (x0 +y0 != 0) {
-  //      printf("px=%4x ", px); printf("py=%4x ", py); printf("x0=%4x ", x0); printf("y0=%4x\n", y0);
-      }
 
       short x=0;
       short y=0;
@@ -103,9 +78,9 @@ if (0 && log >= logFrom) {
   printf("\n");
 }
 
-
         // breakout also if negative as this indicates overflow of the addition which is a fault
-        if ((xSqr + ySqr) > LIMIT || (xSqr+ySqr) < 0) {
+        //if ((xSqr + ySqr) > LIMIT || (xSqr+ySqr) < 0) 
+        if ((xSqr + ySqr) > LIMIT) {
           break;
         }
 
@@ -150,3 +125,28 @@ if (0 && log >= logFrom) {
     py = py + 1;
   }
 }
+
+short toPrec(double f, int bitsPrecision) {
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x200 ? '1' : '0'), \
+  (byte & 0x100 ? '1' : '0'), \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0')
+
+  short whole = ((short)floor(f) << (bitsPrecision));
+  short part = (f-floor(f))*(pow(2,bitsPrecision));
+  short ret = whole + part;
+  printf(" %3f -> dec: %3d   hex: 0x%04x  bin: %c%c %c%c%c%c%c%c%c%c\n",f, ret, ret, BYTE_TO_BINARY(ret));
+  return ret;
+}
+short s(short i) {
+  return i;
+}
+
+
