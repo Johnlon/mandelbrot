@@ -21,6 +21,8 @@ short toPrec(double f, int bitsPrecision);
 
 int main(int argc, char* argv[])
 {
+int log=0;
+
   // chosen to match https://www.youtube.com/watch?v=DC5wi6iv9io
   int width = 32; // basic width of a zx81
   int height = 22; // basic width of a zx81
@@ -38,8 +40,9 @@ int main(int argc, char* argv[])
 
 
   // fractal
-  //char * chr = ".:-=X$#@.";
-  char * chr = "abcdefghijklmnopqr ";
+  //char * chr = ".:-=X$#@ ";
+  //char * chr = "12345678 ";
+  char * chr = "123456789ABCD ";
   //char * chr = ".,'~=+:;[/<&?oxOX#.";
   short maxIters = strlen(chr);
 
@@ -65,20 +68,36 @@ int main(int argc, char* argv[])
         // Breakout if sum is > the limit OR breakout also if sum is negative which indicates overflow of the addition has occurred
         // The overflow check is only needed for precisions of over 6 bits because for 7 and above the sums come out overflowed and negative therefore we always run to maxIters and we see nothing.
         // By including the overflow break out we can see the fractal again though with noise.
-        if ((xSqr + ySqr) >= LIMIT || (xSqr+ySqr) < 0) {
+        short sum =(xSqr + ySqr);
+        if (sum >= LIMIT || sum < 0) {
           break;
         }
 
         short xt = xSqr - ySqr + x0;
-        y = s(s(s(x * y) >> bitsPrecision) * 2) + y0;
+if (log == 26) {
+  printf("\n");
+  printf("i    %4x\n", i);
+  printf("diff %4x\n", (xSqr - ySqr)&0xffff);
+  printf("x %4x\n", x & 0xffff);
+  printf("y %4x\n", y & 0xffff);
+  printf("m %4x\n", (x*y) & 0xffff);
+  printf("m6 %4x\n", (s(x*y)>>6) & 0xffff);
+  printf("m1 %4x\n", (s(s(x*y)>>6) <<1) & 0xffff);
+}
+        y = s(s(s(x * y) >> bitsPrecision) << 1) + y0;
         x=xt;
 
         i = i + 1;
       }
       i = i - 1;
 
+
+if (log == 26) {
+  exit(1);
+}
       printf("%c", chr[i]);
 
+log++;
       px = px + 1;
     }
 
@@ -92,6 +111,7 @@ short toPrec(double f, int bitsPrecision) {
   short whole = ((short)floor(f) << (bitsPrecision));
   short part = (f-floor(f))*(pow(2,bitsPrecision));
   short ret = whole + part;
+  printf("%x\n", ret);
   return ret;
 }
 
