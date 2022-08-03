@@ -1,18 +1,13 @@
 
 /**
-  ascii Mandelbrot using 16 bits of fixed pofloat integer maths with a selectable fractional precision in bits.
+  Matches Matt Heffernans Basic impl on his Commander X16 plot with similar colours - see his "8-Bit Battle Royale" YT
 
-  This is still only 16 bits mathc and allocating more than 6 bits of fractional precision leads to an overflow that adds noise to the plot..
-
-  This code frequently casts to float to ensure we're not accidentally benefitting from GCC promotion from float 16 bits to int.
-
-  gcc integerFlex.c  -lm
+  gcc floatColour.c
 
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <stdint.h>
 #include <string.h>
 
