@@ -46,7 +46,7 @@ $ gcc floatText.c && ./a.out
 $ gcc floatColour.c && ./a.out  
 ```
 
-![float.png](float.png)
+![float.png](float.png | width=100)
 
 
 # integer.c
@@ -55,5 +55,5 @@ $ gcc floatColour.c && ./a.out
 $ gcc integer.c -lm  && ./a.out  
 ```
 
-![integer.png](integer.png)
+![integer.png](integer.png | width=100)
 
