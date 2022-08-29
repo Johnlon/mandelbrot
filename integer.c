@@ -6,7 +6,7 @@
 
   This code frequently casts to short to ensure we're not accidentally benefitting from GCC promotion from short 16 bits to int.
 
-  gcc integerFlex.c  -lm
+  gcc integer.c  -lm
 
  */
 
